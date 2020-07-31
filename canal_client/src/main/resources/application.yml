@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: canal-client
+  profiles:
+    active: dev

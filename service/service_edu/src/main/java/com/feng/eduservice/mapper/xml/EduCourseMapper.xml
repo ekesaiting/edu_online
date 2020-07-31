@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feng.eduservice.mapper.EduCourseMapper">
+
+    <select id="getCoursePublishInfo" resultType="com.feng.eduservice.entity.vo.CoursePublishVO">
+        SELECT c.title,
+               c.cover,
+               c.lesson_num                    AS lessonNum,
+               CONVERT(c.price, DECIMAL(8, 2)) AS price,
+               cs.description                  As description,
+               s1.title                        AS subjectLevelOne,
+               s2.title                        AS subjectLevelTwo,
+               t.name                          AS teacherName
+        FROM edu_course c
+                 LEFT JOIN edu_teacher t ON c.teacher_id = t.id
+                 left join edu_course_description cs on c.id = cs.id
+                 LEFT JOIN edu_subject s1 ON c.subject_parent_id = s1.id
+                 LEFT JOIN edu_subject s2 ON c.subject_id = s2.id
+        WHERE c.id = #{id}
+    </select>
+    <select id="getCourseFrontInfo" resultType="com.feng.eduservice.entity.vo.CourseFrontInfoVO">
+        SELECT c.id,
+               c.title,
+               c.cover,
+               c.view_count                    as viewCount,
+               c.buy_count                     as buyCount,
+               c.lesson_num                    AS lessonNum,
+               CONVERT(c.price, DECIMAL(8, 2)) AS price,
+               cs.description                  As description,
+               s1.title                        AS subjectLevelOne,
+               s1.id                           as subjectLevelOneId,
+               s2.id                           as subjectLevelTwoId,
+               s2.title                        AS subjectLevelTwo,
+               t.name                          AS teacherName,
+               t.intro                         as intro,
+               t.avatar                        as avatar,
+               t.id                            as teacherId
+        FROM edu_course c
+                 LEFT JOIN edu_teacher t ON c.teacher_id = t.id
+                 left join edu_course_description cs on c.id = cs.id
+                 LEFT JOIN edu_subject s1 ON c.subject_parent_id = s1.id
+                 LEFT JOIN edu_subject s2 ON c.subject_id = s2.id
+        WHERE c.id = #{id}
+    </select>
+</mapper>
