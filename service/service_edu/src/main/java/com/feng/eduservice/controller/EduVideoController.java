@@ -36,7 +36,6 @@ public class EduVideoController {
         System.out.println(videoParam);
         EduVideo eduVideo = new EduVideo();
         BeanUtils.copyProperties(videoParam,eduVideo);
-        System.out.println(eduVideo);
         boolean res = videoService.updateById(eduVideo);
         return res?Resp.ok():Resp.error();
     }

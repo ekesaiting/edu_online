@@ -2,6 +2,7 @@ package com.feng.ucenterservice.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.feng.commonutils.JwtUtils;
+import com.feng.commonutils.Resp;
 import com.feng.commonutils.ResultCodeEnum;
 import com.feng.servicebase.exception.BasicException;
 import com.feng.ucenterservice.entity.UcenterMember;
@@ -11,9 +12,7 @@ import com.feng.ucenterservice.utils.WeixingOAuth2Properties;
 import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -24,14 +23,14 @@ import java.util.HashMap;
  * @Date 2020/7/24 14:02
  */
 @Controller
-@RequestMapping("/api/ucenter/wx")
 public class WxApiController {
     @Autowired
     private WeixingOAuth2Properties wxProperties;
     @Autowired
     private UcenterMemberService memberService;
 
-    @GetMapping("callback")
+    //此为固定地址，用户微信确认后回调尚硅谷填写的固定地址，再由尚硅谷的服务器重定向到此地址
+    @GetMapping("/api/ucenter/wx/callback")
     public String callback(String code,String state){
         //向认证服务器发送请求换取access_token
         String baseAccessTokenUrl = "https://api.weixin.qq.com/sns/oauth2/access_token" +
@@ -74,6 +73,7 @@ public class WxApiController {
                 memberRes.setAvatar(avatar);
                 memberService.save(memberRes);
             }
+            //重定向到前端页面首页，并附带token信息，前端携带token访问正常登入接口得到用户信息
             String url="http://localhost:3000";
             String jwtToken = JwtUtils.getJwtToken(memberRes.getId(), memberRes.getNickname());
             url=url+"?token="+jwtToken;
@@ -84,8 +84,9 @@ public class WxApiController {
         }
     }
 
-    @GetMapping("/login")
-    public String getWxCode(){
+    @GetMapping("/ucenterService/member/wxLogin")
+    @ResponseBody
+    public Resp getWxCode(){
         // 微信开放平台授权baseUrl
         String baseUrl = "https://open.weixin.qq.com/connect/qrconnect" +
                 "?appid=%s" +
@@ -101,6 +102,6 @@ public class WxApiController {
             e.printStackTrace();
         }
         String url=String.format(baseUrl,wxProperties.getAppId(),encodeUrl,"ekst");
-        return "redirect:"+url;
+        return Resp.ok().data("codeUrl",url);
     }
 }

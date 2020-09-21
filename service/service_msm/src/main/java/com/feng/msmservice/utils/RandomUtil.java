@@ -58,7 +58,6 @@ public class RandomUtil {
 			r.add(list.get((int) robjs[i]));
 			System.out.print(list.get((int) robjs[i]) + "\t");
 		}
-		System.out.print("\n");
 		return r;
 	}
 }

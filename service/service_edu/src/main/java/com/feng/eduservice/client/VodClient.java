@@ -2,6 +2,7 @@ package com.feng.eduservice.client;
 
 import com.feng.commonutils.Resp;
 import com.feng.eduservice.client.fallback.VodFileDegradeFeignClient;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.DeleteMapping;

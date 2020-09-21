@@ -44,6 +44,7 @@ import java.util.Set;
  * @author zhaoyb
  *
  */
+@SuppressWarnings("all")
 public class HttpClientUtils {
 
 	public static final int connTimeout=10000;
