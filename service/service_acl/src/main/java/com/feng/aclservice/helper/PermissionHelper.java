@@ -27,6 +27,7 @@ public class PermissionHelper {
                 trees.add(findChildren(treeNode,treeNodes));
             }
         }
+
         return trees;
     }
 

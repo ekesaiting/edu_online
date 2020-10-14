@@ -43,6 +43,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
             throws IOException, ServletException {
         logger.info("================="+req.getRequestURI());
+        //执行登入与获取修改权限等才需要进行认证，其他接口如果没有权限不会在前端显示，
         if(!req.getRequestURI().contains("aclService")) {
             chain.doFilter(req, res);
             return;
@@ -56,6 +57,7 @@ public class TokenAuthenticationFilter extends BasicAuthenticationFilter {
         }
 
         if (authentication != null) {
+            //登入成功将用户名保存在SecurityContext中
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } else {
             ResponseUtil.out(res, Resp.error());

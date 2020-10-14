@@ -29,14 +29,30 @@ public class PermissionController {
         List<Permission> permissionList=permissionService.getAllPermission();
         return Resp.ok().data("permissionList",permissionList);
     }
-    @DeleteMapping("deletePermission/{permissionId}")
+    @DeleteMapping("/remove/{permissionId}")
     public Resp deletePermission(@PathVariable("permissionId") String permissionId){
         permissionService.removeChildrenById(permissionId);
         return Resp.ok();
     }
-    @PostMapping("/grantPermissionsToRole")
-    public Resp grantPermissionsToRole(@RequestBody RolePermissionsParams params){
-        permissionService.grantPermissionsToRole(params.getRoleId(),params.getPermissionIdList());
+    @PostMapping("/doAssign")
+    public Resp doAssign(String roleId,String[] permissionId) {
+        permissionService.saveRolePermissionRealtionShip(roleId,permissionId);
+        return Resp.ok();
+    }
+    @GetMapping("toAssign/{roleId}")
+    public Resp toAssign(@PathVariable String roleId) {
+        List<Permission> list = permissionService.selectAllMenu(roleId);
+        return Resp.ok().data("children", list);
+    }
+    @PostMapping("save")
+    public Resp save(@RequestBody Permission permission) {
+        permissionService.save(permission);
+        return Resp.ok();
+    }
+
+    @PutMapping("update")
+    public Resp updateById(@RequestBody Permission permission) {
+        permissionService.updateById(permission);
         return Resp.ok();
     }
 

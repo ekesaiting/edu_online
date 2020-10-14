@@ -23,7 +23,7 @@ public class UnauthorizedEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
                          AuthenticationException authException) throws IOException, ServletException {
-
+        //未认证成功向输出流中返回一个error的Resp json字符串，前端接收到跳转到登入页面
         ResponseUtil.out(response, Resp.error());
     }
 }

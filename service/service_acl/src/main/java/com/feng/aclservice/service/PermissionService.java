@@ -26,4 +26,8 @@ public interface PermissionService extends IService<Permission> {
     List<String> selectPermissionValueByUserId(String id);
 
     List<JSONObject> selectPermissionByUserId(String id);
+
+    List<Permission> selectAllMenu(String roleId);
+
+    void saveRolePermissionRealtionShip(String roleId, String[] permissionId);
 }

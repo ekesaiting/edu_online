@@ -39,7 +39,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
         this.tokenManager = tokenManager;
         this.redisTemplate = redisTemplate;
         this.setPostOnly(false);
-        //访问这个借口spring security自动判断是否登入成功
+        //访问这个接口spring security自动判断是否登入成功
         this.setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/aclService/index/login","POST"));
     }
 
@@ -64,6 +64,7 @@ public class TokenLoginFilter extends UsernamePasswordAuthenticationFilter {
                                             Authentication auth) {
         SecurityUser user = (SecurityUser) auth.getPrincipal();
         String token = tokenManager.createToken(user.getCurrentUserInfo().getUsername());
+        //登入成功将用户名与权限列表缓存起来，之后的访问都将查询用户的权限
         redisTemplate.opsForValue().set(user.getCurrentUserInfo().getUsername(), user.getPermissionValueList());
 
         ResponseUtil.out(res, Resp.ok().data("token", token));

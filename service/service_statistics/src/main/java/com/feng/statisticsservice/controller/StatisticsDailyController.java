@@ -30,7 +30,7 @@ public class StatisticsDailyController {
     public Resp showSta(@PathVariable("type") String type,
                         @PathVariable("begin") String begin,
                         @PathVariable("end") String end){
-
+        System.out.println("hello");
         Map<String,Object> map=statisticsService.getShowData(type,begin,end);
 
         return Resp.ok().data(map);
